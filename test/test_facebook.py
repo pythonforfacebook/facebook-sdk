@@ -190,6 +190,25 @@ class TestAccessToken(FacebookTestCase):
             self.assertEqual(
                 e.message, "fb_exchange_token parameter not specified")
 
+    def test_get_code_from_token(self):
+        """
+        Test that get_code_from_token returns a valid code which can be
+        exchanged for an access token.
+        """
+        redirect_uri = 'https://localhost/facebook/callback/'
+        app_token = facebook.GraphAPI().get_app_access_token(self.app_id,
+                                                             self.secret)
+        self.create_test_users(self.app_id,
+                          facebook.GraphAPI(app_token), 1)
+        test_token = self.test_users[0]['access_token']
+        graph = facebook.GraphAPI(test_token)
+        self.assertIsNotNone(graph.get_code_from_token(
+                        self.app_id, self.secret, redirect_uri),
+                        'Code not returned by get_code_from_token method')
+        self.assertIsNotNone(graph.get_access_token_from_code(
+                        self.app_id, self.secret), 'Invalid code returned by'
+                        'get_code_from_token method')
+
     def test_bogus_access_token(self):
         graph = facebook.GraphAPI(access_token='wrong_token')
         self.assertRaises(facebook.GraphAPIError, graph.get_object, 'me')
