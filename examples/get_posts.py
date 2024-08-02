@@ -19,7 +19,7 @@ def some_action(post):
 # here: https://developers.facebook.com/tools/explorer/
 access_token = ""
 # Look at Bill Gates's profile for this example by using his Facebook id.
-user = "BillGates"
+user = "jeremy.b.matthews.3"
 
 graph = facebook.GraphAPI(access_token)
 profile = graph.get_object(user)
